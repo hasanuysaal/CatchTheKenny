@@ -20,6 +20,7 @@ class ViewController: UIViewController {
     var hScore = 0
     var counter = 10
     var kennyPoints = [CGPoint]()
+    var alert = UIAlertController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +37,6 @@ class ViewController: UIViewController {
             CGPoint(x: width * 0.20, y: height * 0.73),
             CGPoint(x: width * 0.50, y: height * 0.73),
             CGPoint(x: width * 0.80, y: height * 0.73)
-            
         ]
         uiimageView.contentMode = UIView.ContentMode.scaleToFill
         uiimageView.frame.size.width = width * 0.25
@@ -94,6 +94,7 @@ class ViewController: UIViewController {
         
     }
     
+    
     @objc func kennyTimerFunc(){
         
        
@@ -114,6 +115,24 @@ class ViewController: UIViewController {
             self.uiimageView.isHidden = true
             self.timer.invalidate()
             self.kennyTimer.invalidate()
+            
+            self.alert = UIAlertController(title: "Time's up", message: "Do you want to play again?", preferredStyle: .alert)
+            let noBtn = UIAlertAction(title: "NO", style: .default, handler: nil)
+            let yesBtn = UIAlertAction(title: "YES", style: .default) { UIAlertAction in
+                self.counter = 10
+                self.timerLabel.text = "Time Left : \(self.counter)"
+                self.score = 0
+                self.scoreLabel.text = "Score : \(self.score)"
+                
+                self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: true)
+                
+                self.kennyTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.kennyTimerFunc), userInfo: nil, repeats: true)
+                
+            }
+            self.alert.addAction(yesBtn)
+            self.alert.addAction(noBtn)
+            self.present(self.alert, animated: true, completion: nil)
+            
         }
         
         

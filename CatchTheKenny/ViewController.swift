@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     let timerLabel = UILabel()
     let scoreLabel = UILabel()
     let hScoreLabel = UILabel()
+    var timer = Timer()
     var score = 0
     var hScore = 0
     var counter = 10
@@ -42,7 +43,6 @@ class ViewController: UIViewController {
         timerLabel.shadowColor = .black
         timerLabel.shadowOffset = CGSize.init(width: 0.5, height: 0.5)
         
-        
         scoreLabel.text = "Score : \(score)"
         scoreLabel.textAlignment = .center
         scoreLabel.frame = CGRect(x: width * 0.5 - ((width-50)/2), y: height * 0.15 + 10, width: width - 50, height: height * 0.05)
@@ -58,6 +58,8 @@ class ViewController: UIViewController {
         hScoreLabel.backgroundColor = .orange
         hScoreLabel.shadowColor = .black
         hScoreLabel.shadowOffset = CGSize.init(width: 0.5, height: 0.5)
+        
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerFunc), userInfo: nil, repeats: true)
         
         addViews(views: [uiimageView, timerLabel, scoreLabel, hScoreLabel])
         
@@ -78,7 +80,16 @@ class ViewController: UIViewController {
         self.scoreLabel.text = "Score : \(self.score)"
         
     }
-
+    
+    @objc func timerFunc(){
+        
+        if counter == 1 {
+            timer.invalidate()
+        }
+        
+        self.counter -= 1
+        timerLabel.text = "Time Left : \(counter)"
+    }
 
 }
 

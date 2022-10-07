@@ -27,6 +27,7 @@ class ViewController: UIViewController {
         
         let width = view.frame.size.width
         let height = view.frame.size.height
+        
         kennyPoints = [
             CGPoint(x: width * 0.20, y: height * 0.35),
             CGPoint(x: width * 0.50, y: height * 0.35),
@@ -38,6 +39,7 @@ class ViewController: UIViewController {
             CGPoint(x: width * 0.50, y: height * 0.73),
             CGPoint(x: width * 0.80, y: height * 0.73)
         ]
+        
         uiimageView.contentMode = UIView.ContentMode.scaleToFill
         uiimageView.frame.size.width = width * 0.25
         uiimageView.frame.size.height = height * 0.15
@@ -64,7 +66,13 @@ class ViewController: UIViewController {
         scoreLabel.shadowColor = .black
         scoreLabel.shadowOffset = CGSize.init(width: 0.5, height: 0.5)
         
-        hScoreLabel.text = "High Score : \(hScore)"
+        if let highScore = UserDefaults.standard.object(forKey: "hScore") as? Int {
+            hScore = highScore
+            hScoreLabel.text = "High Score : \(hScore)"
+        } else {
+            hScoreLabel.text = "High Score : \(hScore)"
+        }
+        
         hScoreLabel.textAlignment = .center
         hScoreLabel.frame = CGRect(x: width * 0.5 - ((width-50)/2), y: height * 0.9, width: width - 50, height: height * 0.05)
         hScoreLabel.textColor = .white
@@ -97,11 +105,9 @@ class ViewController: UIViewController {
     
     @objc func kennyTimerFunc(){
         
-       
         let random = Int(arc4random_uniform(UInt32(self.kennyPoints.count - 1)))
         self.uiimageView.center = self.kennyPoints[random]
         self.uiimageView.isHidden = false
-        
         
     }
     
@@ -111,10 +117,15 @@ class ViewController: UIViewController {
         self.timerLabel.text = "Time Left : \(self.counter)"
         
         if counter == 0 {
-            
             self.uiimageView.isHidden = true
             self.timer.invalidate()
             self.kennyTimer.invalidate()
+            
+            if self.score > self.hScore {
+                self.hScore = self.score
+                UserDefaults.standard.set(self.hScore, forKey: "hScore")
+                self.hScoreLabel.text = "High Score : \(hScore)"
+            }
             
             self.alert = UIAlertController(title: "Time's up", message: "Do you want to play again?", preferredStyle: .alert)
             let noBtn = UIAlertAction(title: "NO", style: .default, handler: nil)
@@ -134,9 +145,6 @@ class ViewController: UIViewController {
             self.present(self.alert, animated: true, completion: nil)
             
         }
-        
-        
     }
-
 }
 

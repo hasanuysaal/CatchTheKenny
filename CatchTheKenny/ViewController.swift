@@ -30,6 +30,10 @@ class ViewController: UIViewController {
         uiimageView.center = CGPoint(x: width * 0.25, y: height * 0.35)
         uiimageView.image = kennyImage
         
+        uiimageView.isUserInteractionEnabled = true
+        let tapGR = UITapGestureRecognizer(target: self, action: #selector(tapTheKenny))
+        uiimageView.addGestureRecognizer(tapGR)
+        
         timerLabel.text = "Time Left : \(counter)"
         timerLabel.textAlignment = .center
         timerLabel.frame = CGRect(x: width * 0.5 - ((width-50)/2), y: height * 0.1, width: width - 50, height: height * 0.05)
@@ -62,10 +66,16 @@ class ViewController: UIViewController {
     }
     
     func addViews(views: [UIView]){
+        
         for view in views {
             self.view.addSubview(view)
         }
+    }
+    
+    @objc func tapTheKenny(){
         
+        self.score += 1
+        self.scoreLabel.text = "Score : \(self.score)"
         
     }
 
